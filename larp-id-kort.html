@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXUS ID – digitalt identifikationskort</title>
+<script>document.documentElement.dataset.theme="scifi";</script>
+<style>
+:root,[data-theme=fantasy]{--bg:#14110f;--panel:#1e1916;--panel2:#272019;--line:#3a3027;--text:#efe6d8;--muted:#a89b88;--accent:#e0a84a;--onaccent:#1a1209;--bad:#d9684f;--radius:14px;--hdr:rgba(20,17,15,.96);--head:"Palatino Linotype",Palatino,Georgia,serif}
+[data-theme=neutral]{--bg:#f3f4f6;--panel:#fff;--panel2:#f1f3f5;--line:#d9dde3;--text:#1f2933;--muted:#667085;--accent:#2f6fed;--onaccent:#fff;--bad:#c9400b;--radius:12px;--hdr:rgba(255,255,255,.96);--head:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+[data-theme=scifi]{--bg:#05090f;--panel:#0b1420;--panel2:#101c2b;--line:#1e3a52;--text:#d6f1ff;--muted:#6f94ad;--accent:#19e3ff;--onaccent:#00131a;--bad:#ff5a6e;--radius:4px;--hdr:rgba(5,9,15,.96);--head:Bahnschrift,"Segoe UI Semibold",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:40px}
+h1,h2,h3{font-family:var(--head);margin:0}
+header.top{position:sticky;top:0;z-index:10;background:var(--hdr);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header.top h1{font-size:1.15rem;color:var(--accent);margin-right:auto}
+main{max-width:640px;margin:0 auto;padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+.muted{color:var(--muted)}.small{font-size:.85rem}
+button,.btn,select,textarea{font:inherit;color:var(--text)}
+button,.btn{cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--panel2);padding:9px 14px;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{border-color:var(--accent)}
+.primary{background:var(--accent)!important;color:var(--onaccent)!important;border-color:var(--accent)!important;font-weight:700}
+.danger{color:var(--bad)}.sm{padding:6px 10px;font-size:.85rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sel{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+textarea{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;min-height:60px}
+.empty{text-align:center;color:var(--muted);padding:32px 12px;border:1px dashed var(--line);border-radius:var(--radius);margin-bottom:14px}
+.pick{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.pick button{white-space:nowrap}.pick button.on{border-color:var(--accent);color:var(--accent);font-weight:700}
+
+/* ----- selve kortet ----- */
+.idw{container-type:inline-size;width:100%}
+.idc{position:relative;width:100%;aspect-ratio:1.586;border-radius:4cqw;overflow:hidden;display:flex;flex-direction:column;font-size:3.4cqw;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.idc .bar{display:flex;justify-content:space-between;align-items:center;padding:2.2cqw 4cqw;font-size:3cqw;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.idc .body{flex:1;display:flex;gap:4cqw;padding:3cqw 4cqw;min-height:0}
+.idc .ph{width:30cqw;flex:none;border-radius:2cqw;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12cqw;font-weight:700}
+.idc .ph img{width:100%;height:100%;object-fit:cover}
+.idc .fl{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:1.4cqw}
+.idc .nm{font-size:6.2cqw;font-weight:700;line-height:1.1;overflow-wrap:anywhere}
+.idc .f small{display:block;font-size:2.2cqw;letter-spacing:.14em;text-transform:uppercase;opacity:.65}
+.idc .f b{font-size:3.6cqw;font-weight:600}
+.idc .ft{display:flex;justify-content:space-between;gap:2cqw;padding:1.8cqw 4cqw;font-size:2.4cqw;letter-spacing:.06em}
+.idc .ft span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* scifi */
+.idc.scifi{background:linear-gradient(135deg,#06121d,#0b2336);color:#d6f1ff;border:.35cqw solid #19e3ff;font-family:Bahnschrift,"Segoe UI Semibold",ui-monospace,Menlo,Consolas,monospace;border-radius:2cqw}
+.idc.scifi .bar{background:rgba(25,227,255,.14);color:#19e3ff;border-bottom:.25cqw solid #19e3ff}
+.idc.scifi .ph{background:#0d2a3f;color:#19e3ff;border:.3cqw solid #19e3ff;border-radius:.8cqw}
+.idc.scifi .ft{border-top:.25cqw solid rgba(25,227,255,.5);color:#6fc9de}
+.idc.scifi .nm{text-transform:uppercase;letter-spacing:.05em}
+.idc.scifi::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(25,227,255,.05) 0 1px,transparent 1px 4px);pointer-events:none}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;width:calc(100% - 24px);max-width:560px;padding:16px}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+dialog.full{max-width:none;width:100vw;height:100vh;max-height:none;border-radius:0;display:flex;flex-direction:column;justify-content:center;background:#000;border:0}
+dialog.full[open]{display:flex}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--accent);color:var(--onaccent);padding:10px 18px;border-radius:99px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header class="top"><h1>🪪 NEXUS ID</h1>
+  <button class="primary sm" id="btnImport">+ Importér</button>
+</header>
+<main id="app"></main>
+
+<dialog id="dlgImp">
+  <div class="row" style="justify-content:space-between"><h3>Importér kort</h3><button class="sm" id="impClose">Luk</button></div>
+  <p class="muted small">Åbn kortet direkte fra karakterskema-appen, vælg en kort-fil (.larpid), eller indsæt koden/linket.</p>
+  <label class="btn sm">📂 Vælg kort-fil<input type="file" id="impFile" accept=".larpid,.txt,text/plain" hidden></label>
+  <textarea id="impText" placeholder="LI1z…" style="margin-top:10px"></textarea>
+  <button class="primary" id="impGo" style="margin-top:8px">Importér</button>
+</dialog>
+<dialog id="dlgFull" class="full"><div class="idw" id="fullCard" style="max-width:min(100vw,calc((100vh - 60px)*1.586))"></div>
+  <div class="row" style="justify-content:center;margin-top:14px"><button id="fullClose">Luk</button></div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S=(v,n)=>typeof v==='string'?v.slice(0,n||200):'';
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2200);}
+const BRAND='NEXUS ID';
+const KEY='larp_idcards_v1';
+let db={cards:[],sel:null};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&Array.isArray(s.cards))db=s;}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){toast('Kunne ikke gemme – er lageret fuldt?');}}
+
+/* ---------- Import ---------- */
+function b64d(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';const bin=atob(str),o=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)o[i]=bin.charCodeAt(i);return o;}
+function extract(t){const m=String(t||'').match(/LI1[zp][A-Za-z0-9_-]+/);return m?m[0]:null;}
+async function unpack(code){
+  const m=code.match(/^LI1([zp])([A-Za-z0-9_-]+)$/);if(!m)throw new Error('format');
+  const bytes=b64d(m[2]);let text;
+  if(m[1]==='z'){if(!('DecompressionStream' in window))throw new Error('nosupport');
+    text=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();}
+  else text=new TextDecoder().decode(bytes);
+  return JSON.parse(text);
+}
+function clean(o){
+  if(!o||o.t!=='id'||o.v!==1)throw new Error('invalid');
+  const img=typeof o.img==='string'&&/^data:image\/(jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(o.img)&&o.img.length<400000?o.img:'';
+  const ev=o.ev&&typeof o.ev==='object'?{title:S(o.ev.title,150),organizer:S(o.ev.organizer,120),date:S(o.ev.date,10),dateEnd:S(o.ev.dateEnd,10)}:null;
+  const c={cid:S(o.cid,40).replace(/[^A-Za-z0-9_-]/g,'')||String(Date.now()),name:S(o.name,80),age:S(o.age,20),prof:S(o.prof,80),race:S(o.race,60),aff:S(o.aff,100),world:S(o.world,100),img,ev,ts:Number(o.ts)||Date.now()};
+  c.id=c.cid+'|'+(ev?ev.title:'');
+  return c;
+}
+async function importCode(code){
+  try{
+    const c=clean(await unpack(code));
+    const i=db.cards.findIndex(x=>x.id===c.id);
+    if(i>=0){db.cards[i]=c;toast('Kort opdateret');}else{db.cards.push(c);toast('Kort importeret');}
+    db.sel=c.id;save();render();return true;
+  }catch(e){toast(e.message==='nosupport'?'Din browser kan ikke pakke koden ud.':'Koden kunne ikke læses som et ID-kort.');return false;}
+}
+$('#btnImport').onclick=()=>$('#dlgImp').showModal();
+$('#impClose').onclick=()=>$('#dlgImp').close();
+$('#impGo').onclick=async()=>{const c=extract($('#impText').value);if(!c)return toast('Ingen gyldig kode fundet.');if(await importCode(c)){$('#impText').value='';$('#dlgImp').close();}};
+$('#impFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const c=extract(await f.text());if(!c)return toast('Filen indeholder ikke et ID-kort.');if(await importCode(c))$('#dlgImp').close();};
+async function handleHash(){const c=extract(location.hash);if(c){history.replaceState(null,'',location.pathname+location.search);await importCode(c);}}
+window.addEventListener('hashchange',handleHash);
+
+/* ---------- Kort ---------- */
+const styleOf=()=>'scifi';
+const fmtD=d=>d?new Date(d+'T12:00').toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}):'';
+function cardNo(c){let h=2166136261;for(const ch of c.cid){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return 'NX-'+(h>>>0).toString(16).toUpperCase().padStart(8,'0').replace(/(.{4})/,'$1-');}
+const field=(l,v)=>v?`<div class="f"><small>${l}</small><b>${esc(v)}</b></div>`:'';
+function cardHTML(c){
+  const st=styleOf(c);
+  const range=c.ev?(c.ev.dateEnd&&c.ev.dateEnd!==c.ev.date?fmtD(c.ev.date)+' – '+fmtD(c.ev.dateEnd):fmtD(c.ev.date)):'';
+  return `<div class="idw"><div class="idc ${st}">
+    <div class="bar"><span>${esc(c.world||'Identifikationskort')}</span><span>${BRAND}</span></div>
+    <div class="body"><div class="ph">${c.img?`<img src="${c.img}" alt="">`:esc((c.name||'?').charAt(0).toUpperCase())}</div>
+      <div class="fl"><div class="nm">${esc(c.name||'Unavngivet')}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.4cqw 3cqw">${field('Alder',c.age)}${field('Race',c.race)}${field('Profession',c.prof)}${field('Tilhørsforhold',c.aff)}</div></div></div>
+    <div class="ft"><span>${esc(cardNo(c))}</span><span>${c.ev?esc(c.ev.title):''}${range?' · '+esc(range):''}</span></div></div></div>`;
+}
+function render(){
+  const app=$('#app');
+  if(!db.cards.length){app.innerHTML=`<div class="empty"><h3>Ingen kort endnu</h3><p>Åbn en karakter i karakterskema-appen og tryk <b>Lav ID-kort</b>. Så dukker kortet op her.</p><button class="primary" id="emptyImp">+ Importér kort</button></div>`;$('#emptyImp').onclick=()=>$('#dlgImp').showModal();return;}
+  if(!db.cards.some(c=>c.id===db.sel))db.sel=db.cards[0].id;
+  const c=db.cards.find(x=>x.id===db.sel);
+  app.innerHTML=`${db.cards.length>1?`<div class="pick">${db.cards.map(x=>`<button data-sel="${esc(x.id)}" class="${x.id===db.sel?'on':''}">${esc(x.name||'Unavngivet')}${x.ev?' · '+esc(x.ev.title):''}</button>`).join('')}</div>`:''}
+  ${cardHTML(c)}
+  <div class="card" style="margin-top:14px">
+    <div class="row"><button class="primary" id="btnSheet">Åbn i rolleskema</button><button id="btnFull">Vis i fuld skærm</button><button id="btnPng">Download PNG</button><button class="danger" id="btnDel">Slet kort</button></div>
+    <details style="margin-top:10px"><summary class="muted small" style="cursor:pointer">Rolleskema-appens adresse</summary><input id="sheetUrl" class="sel" style="width:100%;margin-top:6px" value="${esc(localStorage.getItem('larp_sheet_url')||new URL('larp-spiller.html',location.href).href)}"><div class="muted small">Bruges af knappen \"Åbn i rolleskema\". Karakteren skal ligge i samme browser.</div></details>
+    <p class="muted small" style="margin-bottom:0">Kortet er et rekvisit til spillet. Det er ikke et ægte ID.</p>
+  </div>`;
+  app.querySelectorAll('[data-sel]').forEach(b=>b.onclick=()=>{db.sel=b.dataset.sel;save();render();});
+  $('#btnSheet').onclick=()=>{
+    let u=localStorage.getItem('larp_sheet_url')||new URL('larp-spiller.html',location.href).href;
+    window.open(u.replace(/#.*$/,'')+'#char='+encodeURIComponent(c.cid),'_blank');
+  };
+  $('#btnFull').onclick=()=>{$('#fullCard').innerHTML=cardHTML(c);$('#dlgFull').showModal();};
+  $('#sheetUrl').onchange=e=>{try{localStorage.setItem('larp_sheet_url',e.target.value.trim());}catch(x){}};
+  $('#btnPng').onclick=()=>png(c);
+  $('#btnDel').onclick=()=>{if(confirm('Slette kortet?')){db.cards=db.cards.filter(x=>x!==c);save();render();}};
+}
+$('#fullClose').onclick=()=>$('#dlgFull').close();
+
+/* ---------- PNG ---------- */
+const PAL={
+  scifi:{bg:['#06121d','#0b2336'],text:'#d6f1ff',bar:'rgba(25,227,255,.16)',barT:'#19e3ff',ph:'#0d2a3f',phT:'#19e3ff',ft:'rgba(25,227,255,.06)',ftT:'#6fc9de',edge:'#19e3ff',font:'ui-monospace,Consolas,monospace',hf:'ui-monospace,Consolas,monospace',up:true}
+};
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function fit(c,t,max,font,size){let s=size;do{c.font=font.replace('{s}',s);s-=2;}while(c.measureText(t).width>max&&s>20);return;}
+async function png(card){
+  const P=PAL[styleOf(card)],W=1280,H=Math.round(W/1.586),cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');
+  c.save();rr(c,0,0,W,H,48);c.clip();
+  const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,P.bg[0]);g.addColorStop(1,P.bg[1]);c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.fillStyle=P.bar;c.fillRect(0,0,W,76);c.fillStyle=P.barT;c.font=`700 30px ${P.hf}`;c.textBaseline='middle';
+  c.textAlign='left';c.fillText(((card.world||'Identifikationskort')).toUpperCase().slice(0,40),48,38);c.textAlign='right';c.fillText(BRAND,W-48,38);
+  const px=48,py=118,pw=380,ph=480;c.fillStyle=P.ph;rr(c,px,py,pw,ph,20);c.fill();
+  if(card.img){await new Promise(res=>{const im=new Image();im.onload=()=>{c.save();rr(c,px,py,pw,ph,20);c.clip();const sc=Math.max(pw/im.width,ph/im.height),w=im.width*sc,h=im.height*sc;c.drawImage(im,px+(pw-w)/2,py+(ph-h)/2,w,h);c.restore();res();};im.onerror=res;im.src=card.img;});}
+  else{c.fillStyle=P.phT;c.font=`700 190px ${P.hf}`;c.textAlign='center';c.fillText((card.name||'?').charAt(0).toUpperCase(),px+pw/2,py+ph/2);}
+  c.strokeStyle=P.edge;c.lineWidth=5;rr(c,px,py,pw,ph,20);c.stroke();
+  const x0=px+pw+56,mw=W-x0-48;c.textAlign='left';c.textBaseline='alphabetic';c.fillStyle=P.text;
+  const nm=P.up?(card.name||'Unavngivet').toUpperCase():(card.name||'Unavngivet');fit(c,nm,mw,`700 {s}px ${P.hf}`,84);c.fillText(nm,x0,py+80);
+  const fields=[['Alder',card.age],['Race',card.race],['Profession',card.prof],['Tilhørsforhold',card.aff]].filter(f=>f[1]);
+  fields.forEach((f,i)=>{const cx=x0+(i%2)*(mw/2),cy=py+170+Math.floor(i/2)*130;
+    c.globalAlpha=.65;c.font=`600 24px ${P.font}`;c.fillText(f[0].toUpperCase(),cx,cy);c.globalAlpha=1;fit(c,f[1],mw/2-24,`600 {s}px ${P.font}`,44);c.fillText(f[1],cx,cy+50);});
+  c.fillStyle=P.ft;c.fillRect(0,H-70,W,70);c.fillStyle=P.ftT;c.font=`500 26px ${P.font}`;c.textBaseline='middle';
+  c.textAlign='left';c.fillText(cardNo(card),48,H-35);
+  const range=card.ev?(card.ev.dateEnd&&card.ev.dateEnd!==card.ev.date?fmtD(card.ev.date)+' – '+fmtD(card.ev.dateEnd):fmtD(card.ev.date)):'';
+  c.textAlign='right';const ft=(card.ev?card.ev.title:'')+(range?' · '+range:'');fit(c,ft,W-420,`500 {s}px ${P.font}`,26);c.fillText(ft,W-48,H-35);
+  c.restore();c.strokeStyle=P.edge;c.lineWidth=6;rr(c,3,3,W-6,H-6,46);c.stroke();
+  cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=(card.name||'id-kort').toLowerCase().replace(/[^a-z0-9æøå]+/gi,'-')+'-id-kort.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);},'image/png');
+}
+
+render();handleHash();
+})();
+</script>
+</body>
+</html>
